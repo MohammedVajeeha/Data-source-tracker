@@ -1,0 +1,88 @@
+/* SearchBar Container */
+.search-bar-container1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Field */
+  .searchbar-container1-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    margin-right: 10px;
+  }
+  
+  /* Search Button */
+  .btn-search {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-search:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Cancel Button */
+  .btn-cancel {
+    background-color: #dc3545; /* Red color for cancel button */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #c82333; /* Darker red color on hover */
+  }
+/* CSS for Tech Stack Input */
+.tech-stack-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* CSS for Tech Stack Suggestions */
+.tech-stack-suggestions {
+  position: absolute;
+  z-index: 1;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 100%;
+  background-color: white;
+}
+
+.suggestion {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion:hover {
+  background-color: #f2f2f2;
+}
+
+/* Responsive CSS */
+@media (max-width: 768px) {
+  /* Adjust the width of the input and suggestions for smaller screens */
+  .tech-stack-input {
+    width: 80%; /* You can adjust the width as needed */
+  }
+
+  .tech-stack-suggestions {
+    max-height: 100px; /* You can adjust the max-height as needed */
+  }
+}

@@ -1,0 +1,85 @@
+/* Styling for the accordion */
+.accordion {
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
+    margin: 0 auto;
+  }
+  
+  .accordion-button {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .accordion-button.collapsed {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  /* Styling for the table container */
+  .table-container {
+    display: none; /* Initially hide the table container */
+  }
+  
+  /* Styling for the table */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Styling for action buttons */
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover,
+  .btn-danger:hover {
+    filter: brightness(1.2);
+  }
+  
+  /* Styling for the accordion body */
+  .accordion-body {
+    padding: 10px;
+    background-color: #f8f9fa;
+  }
+  
+  /* Add some spacing between accordion items */
+  .accordion-item:not(:last-child) {
+    margin-bottom: 10px;
+  }
+  
+  /* Hover effect for accordion header */
+  .accordion-header button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Show table container when the accordion is expanded */
+  .accordion-item.show .table-container {
+    display: block;
+  }
+  
