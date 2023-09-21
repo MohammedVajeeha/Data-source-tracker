@@ -1,3 +1,64 @@
+import React, { useState } from 'react';
+import './Filter.css';
+
+
+function FilterComponent({ onFilter, onCancel, techStackOptions, statusOptions }) {
+  const [selectedTechStack, setSelectedTechStack] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
+
+  const handleFilterClick = () => {
+    onFilter(selectedTechStack, selectedStatus);
+  };
+
+  const handleCancelClick = () => {
+    setSelectedTechStack('');
+    setSelectedStatus('');
+    onCancel();
+  };
+
+  return (
+    <div className="filter-container">
+      <select
+        value={selectedTechStack}
+        onChange={(e) => setSelectedTechStack(e.target.value)}
+      >
+        <option value="">Select Tech Stack</option>
+        {techStackOptions.map((stack) => (
+          <option key={stack} value={stack}>
+            {stack}
+          </option>
+        ))}
+      </select>
+      <select
+        value={selectedStatus}
+        onChange={(e) => setSelectedStatus(e.target.value)}
+      >
+        <option value="">Select Status</option>
+        {statusOptions.map((status) => (
+          <option key={status} value={status}>
+            {status}
+          </option>
+        ))}
+      </select>
+      <button onClick={handleFilterClick}>Filter</button>
+      <button onClick={handleCancelClick}>Cancel</button>
+    </div>
+  );
+}
+
+export default FilterComponent;
+
+
+
+
+
+
+
+
+
+
+
+
 // import React, { useState } from "react";
 // import "./Filter.css";
 

@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import dayjs from "dayjs"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+
 function MyTable({ data, onEditClick, onDeleteClick }) {
   // return (
   //   <table className="table table-responsive">
@@ -47,6 +48,9 @@ function MyTable({ data, onEditClick, onDeleteClick }) {
   //   </table>
   // );
   return (
+    <div>
+  
+
     <TableContainer component={Paper}>
     <Table sx={{ minWidth: 650 }} stickyHeader  aria-label="simple table">
       <TableHead   >
@@ -84,6 +88,7 @@ function MyTable({ data, onEditClick, onDeleteClick }) {
       </TableBody>
     </Table>
   </TableContainer>
+  </div>
   )
 }
 

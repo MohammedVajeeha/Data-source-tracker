@@ -6,6 +6,8 @@ import CreatePopup from './Components/Users-Portal/Popups/CreatePopup';
 import EditPopup from './Components/Users-Portal/Popups/EditPopup';
 //import FilterBar from './Components/Users-Portal/Filter/Filter';
 import axios from 'axios';
+import FilterComponent from './Components/Users-Portal/Filter/Filter';
+import SearchBarComponent from './Components/Users-Portal/Filter/Searchbar';
 import { Box, Button, Modal } from '@mui/material';
 //import './App.css';
 
@@ -17,6 +19,12 @@ function App() {
   const [isCreatePopupVisible, setCreatePopupVisible] = useState(false);
   const [newRowData, setNewRowData] = useState(null);
   const [rowData, setRowData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [techStackOptions, setTechStackOptions] = useState([]);
+  const [statusOptions, setStatusOptions] = useState([]);
+  const [techStackFilter, setTechStackFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   // const [filters, setFilters] = useState({
   //   projectName: '',
   //   techStack: '',
@@ -37,6 +45,21 @@ function App() {
         console.error('Error fetching data:', error);
       });
   }, []);
+
+
+  const handleFilter = (techStack, status) => {
+    // Implement filtering logic based on techStack and status filters
+    // Update the filteredData state with the filtered results
+  };
+
+  const handleCancel = () => {
+    // Reset the filters and filteredData state
+  };
+
+  const handleSearch = (query) => {
+    // Implement searching logic based on the search query
+    // Update the filteredData state with the search results
+  };
 
 
   const handleEditClick = (row) => {
@@ -146,46 +169,66 @@ function App() {
       console.log('Error deleting data:', error);
     }
   };
+
+  useEffect(() => {
+    // Fetch tech stack options from the backend API
+    fetch('/api/auth/techStackOptions') // Replace with your actual API endpoint
+      .then((response) => response.json())
+      .then((data) => {
+        // Update the tech stack options state with the fetched data
+        setTechStackOptions(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching tech stack options:', error);
+      });
+  }, []);
   // Static data
-  const staticData = [
+  const projectData = [
     {
-      _id: '0',
-      projectName: 'Static Project 1',
-      projectManagerName: 'Static Manager 1',
-      startTime: '2023-09-18',
-      endTime: '2023-09-23',
-      techStack: 'Static Tech Stack',
-      status: 'static',
+      projectName: 'Project 1',
+      projectManagerName: 'Manager A',
+      startTime: '2023-01-01',
+      endTime: '2023-02-01',
+      techStack: 'Tech Stack A',
+      status: 'completed',
     },
     {
-      _id: '00',
-      projectName: 'Static Project 2',
-      projectManagerName: 'Static Manager 2',
-      startTime: '2023-09-19',
-      endTime: '2023-09-24',
-      techStack: 'Static Tech Stack 2',
-      status: 'static',
+      projectName: 'Project 2',
+      projectManagerName: 'Manager B',
+      startTime: '2023-02-15',
+      endTime: '2023-03-15',
+      techStack: 'Tech Stack B',
+      status: 'inprogress',
     },
+    // Add more project objects as needed
   ];
+  
+ 
 
   // Combine static data with dynamic data
   //const combinedData = [...staticData, ...data];
 
   return (
-    <div className="" style={{padding:"20px 15px",display:"flex",flexDirection:"column",gap:"10px"}} >
-
-      <div style={{background:"#fff",padding:"10px 5px",borderRadius:"8px",boxShadow:"1px 1px  16px #00000020"}} >
-      <Button variant='contained' onClick={()=>{handleCreateClick()}} >
-        Create
-      </Button>      
-      {/* <FilterBar
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        onFilterReset={handleFilterReset}
-      /> */}
+    <div className="" style={{ padding: "20px 15px", display: "flex", flexDirection: "column", gap: "10px" }}>
+      <div style={{ background: "#fff", padding: "10px 5px", borderRadius: "8px", boxShadow: "1px 1px  16px #00000020" }}>
+        <Button variant='contained' onClick={() => { handleCreateClick() }}>
+          Create
+        </Button>
+        <FilterComponent
+          techStackOptions={techStackOptions} // Pass tech stack options as a prop
+          statusOptions={statusOptions} // Pass status options as a prop
+          onFilter={handleFilter}
+          onCancel={handleCancel}
+        />
+        <SearchBarComponent onSearch={handleSearch} />
       </div>
       <MyTable
         data={rowData}
+        onFilter={handleFilter} 
+        onCancel={handleCancel}
+        onSearch={handleSearch}
+        techStackOptions={techStackOptions} // Pass tech stack options as a prop
+        statusOptions={statusOptions}
         // filters={filters}
         onEditClick={handleEditClick}
         onDeleteClick={handleDeleteClick} // Pass the delete handler to the Table component
