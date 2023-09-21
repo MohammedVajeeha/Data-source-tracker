@@ -4,6 +4,7 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import { Button } from '@mui/material';
 
 function CreatePopup({ onSave, onClose, initialData }) {
   const [newRowData, setNewRowData] = useState(initialData || {
@@ -93,7 +94,7 @@ function CreatePopup({ onSave, onClose, initialData }) {
   };
 
   return (
-    <div className="popup">
+    <div className="popup" style={{borderRadius:"8px"}} >
       <h2>Create New Row</h2>
       <form>
         <div className="form-group">
@@ -118,6 +119,7 @@ function CreatePopup({ onSave, onClose, initialData }) {
             required // Add HTML5 validation for required field
           />
         </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"40px"}} >
         <div className="form-group">
           <label htmlFor="startTime">Start Date</label>
           <DatePicker
@@ -138,6 +140,8 @@ function CreatePopup({ onSave, onClose, initialData }) {
             required // Add HTML5 validation for required field
           />
         </div>
+        </div>
+
         <div className="form-group">
           <label htmlFor="status">Status</label>
           <Select
@@ -159,13 +163,13 @@ function CreatePopup({ onSave, onClose, initialData }) {
             onChange={handleInputChange}
           />
         </div>
-        <div className="form-actions">
-          <button type="button" onClick={handleCreate}>
-            Create
-          </button>
-          <button type="button" onClick={onClose}>
+        <div className="form-actions  ">
+          <Button variant='outlined'  onClick={onClose}>
             Close
-          </button>
+          </Button>
+          <Button variant='contained'  onClick={handleCreate}>
+            Create
+          </Button>
         </div>
       </form>
     </div>

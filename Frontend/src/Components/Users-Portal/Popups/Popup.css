@@ -5,8 +5,8 @@
   border: 1px solid #ccc;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
   margin: 0 auto;
+  min-width: 50vw;
 }
 
 .popup h2 {
@@ -31,8 +31,10 @@ input[type="text"] {
 }
 
 .form-actions {
-  margin-top: 20px;
-  text-align: right;
+  display: flex;
+  justify-content: end;
+  gap: 15px;
+  align-items: center;
 }
 
 button {
@@ -47,4 +49,11 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+.react-datepicker__input-container {
+  width: inherit;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
 }

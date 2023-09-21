@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Components/Sidebar/Sidebar';
-import Table from './Components/Users-Portal/Projectdetails/Project';
+import MyTable from './Components/Users-Portal/Projectdetails/Project';
 import CreatePopup from './Components/Users-Portal/Popups/CreatePopup';
 import EditPopup from './Components/Users-Portal/Popups/EditPopup';
 //import FilterBar from './Components/Users-Portal/Filter/Filter';
 import axios from 'axios';
+import { Box, Button, Modal } from '@mui/material';
 //import './App.css';
 
 function App() {
@@ -171,15 +172,19 @@ function App() {
   //const combinedData = [...staticData, ...data];
 
   return (
-    <div className="App">
+    <div className="" style={{padding:"20px 15px",display:"flex",flexDirection:"column",gap:"10px"}} >
 
-
+      <div style={{background:"#fff",padding:"10px 5px",borderRadius:"8px",boxShadow:"1px 1px  16px #00000020"}} >
+      <Button variant='contained' onClick={()=>{handleCreateClick()}} >
+        Create
+      </Button>      
       {/* <FilterBar
         filters={filters}
         onFilterChange={handleFilterChange}
         onFilterReset={handleFilterReset}
       /> */}
-      <Table
+      </div>
+      <MyTable
         data={rowData}
         // filters={filters}
         onEditClick={handleEditClick}
@@ -188,20 +193,55 @@ function App() {
       {showCreatePopup && (
         <CreatePopup onSave={handleSaveCreatePopup} onClose={handleCloseCreatePopup} />
       )}
+      
+
       {showEditPopup && selectedRow && (
-        <EditPopup
+        <Modal
+  open={showEditPopup}
+  onClose={()=>handleCloseEditPopup}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <div style={{
+    height:"100vh",
+    width:"100vw",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center"
+  }} >
+<EditPopup
           data={selectedRow}
           onSave={handleSaveEditPopup}
           onClose={handleCloseEditPopup}
         />
+  </div>
+</Modal>
+        
       )}
-      <Sidebar onCreateClick={handleCreateClick} />
+
+
       {isCreatePopupVisible && (
-        <CreatePopup
+        <Modal
+  open={isCreatePopupVisible}
+  onClose={()=>handleClosePopup}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <div style={{
+    height:"100vh",
+    width:"100vw",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center"
+  }} >
+  <CreatePopup
           onSave={handleSaveData}
           onClose={handleClosePopup}
           initialData={newRowData}
         />
+  </div>
+</Modal>
+        
       )}
     </div>
   );

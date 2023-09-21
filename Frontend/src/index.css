@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.root{
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #f4f4f4;
+}
+input{
+  height:30px;
+  font-size: larger;
+  font-weight: 400;
+  color: rgb(60, 60, 60);
+  padding: 2px 20px;
+}

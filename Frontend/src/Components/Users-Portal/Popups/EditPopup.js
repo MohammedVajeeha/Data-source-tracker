@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
 import './Popup.css';
 import axios from 'axios';
-
+import DatePicker from 'react-datepicker';
+import { Button } from '@mui/material';
+// import 'react-datepicker/dist/react-datepicker.css';
 function EditPopup({ data, onSave, onClose }) {
   const [editedData, setEditedData] = useState(data);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedData({ ...editedData, [name]: value });
+  };
+
+  const handleDateChange = (name, date) => {
+    setEditedData({ ...editedData, [name]: date });
   };
 
   const handleSave = () => {
@@ -26,7 +32,7 @@ function EditPopup({ data, onSave, onClose }) {
   };
 
   return (
-    <div className="popup">
+    <div className="popup" style={{borderRadius:"8px"}}>
       <h2>Edit Row</h2>
       <form>
         <div className="form-group">
@@ -49,25 +55,27 @@ function EditPopup({ data, onSave, onClose }) {
             onChange={handleInputChange}
           />
         </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"40px"}} >
         <div className="form-group">
-          <label htmlFor="startTime">Start Time</label>
-          <input
-            type="text"
+          <label htmlFor="startTime">Start Date</label>
+          <DatePicker
             id="startTime"
-            name="startTime"
-            value={editedData.startTime}
-            onChange={handleInputChange}
+            selected={new Date(editedData.startTime)}
+            onChange={(date) => handleDateChange('startTime', date)}
+            dateFormat="MMMM d, yyyy"
+            required // Add HTML5 validation for required field
           />
         </div>
         <div className="form-group">
-          <label htmlFor="endTime">End Time</label>
-          <input
-            type="text"
+          <label htmlFor="endTime">End Date</label>
+          <DatePicker
             id="endTime"
-            name="endTime"
-            value={editedData.endTime}
-            onChange={handleInputChange}
+            selected={new Date(editedData.endTime)}
+            onChange={(date) => handleDateChange('endTime', date)}
+            dateFormat="MMMM d, yyyy"
+            required // Add HTML5 validation for required field
           />
+        </div>
         </div>
         <div className="form-group">
           <label htmlFor="techStack">Tech Stack</label>
@@ -90,12 +98,12 @@ function EditPopup({ data, onSave, onClose }) {
           />
         </div>
         <div className="form-actions">
-          <button type="button" onClick={handleSave}>
-            Save
-          </button>
-          <button type="button" onClick={onClose}>
+          <Button variant='outlined' onClick={onClose}>
             Close
-          </button>
+          </Button>
+          <Button variant='contained' onClick={handleSave}>
+            Save
+          </Button>
         </div>
       </form>
     </div>
