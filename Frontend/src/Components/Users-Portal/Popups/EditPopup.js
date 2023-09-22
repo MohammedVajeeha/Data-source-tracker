@@ -19,17 +19,19 @@ function EditPopup({ data, onSave, onClose }) {
   const handleSave = () => {
     // Make an HTTP PUT request to update the data on the backend
     axios
-    .put(`http://localhost:8080/api/auth/projects/${editedData._id}`, editedData)
-    .then((response) => {
-      console.log(response.data); // Handle success
-      onSave(editedData);
-      onClose();
-    })
-    .catch((error) => {
-      console.error(error); // Handle error
-    });
-  
+      .put(`http://localhost:8080/api/auth/projects/${editedData._id}`, editedData)
+      .then((response) => {
+        console.log(response.data); // Handle success
+        onSave(editedData); // Notify the parent component that the data was saved
+      })
+      .catch((error) => {
+        console.error(error); // Handle error
+      })
+      .finally(() => {
+        onClose(); // Close the edit popup whether the request succeeds or fails
+      });
   };
+  
 
   return (
     <div className="popup" style={{borderRadius:"8px"}}>

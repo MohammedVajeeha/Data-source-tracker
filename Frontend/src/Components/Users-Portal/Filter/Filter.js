@@ -4,6 +4,7 @@ import './Filter.css';
 
 function FilterComponent({ onFilter, onCancel, techStackOptions, statusOptions }) {
   const [selectedTechStack, setSelectedTechStack] = useState('');
+  
   const [selectedStatus, setSelectedStatus] = useState('');
 
   const handleFilterClick = () => {

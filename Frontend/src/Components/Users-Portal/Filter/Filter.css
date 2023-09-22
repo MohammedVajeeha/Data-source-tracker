@@ -1,6 +1,13 @@
 /* CSS for FilterComponent and SearchBarComponent containers */
-.filter-container,
+
 .search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adjust the spacing between elements */
+  height: 40px; /* Set the height as needed */
+  margin-bottom: 10px; /* Add margin at the bottom for separation */
+}
+.filter-container{
   display: flex;
   align-items: center;
   gap: 10px; /* Adjust the spacing between elements */
@@ -42,3 +49,7 @@
 }
 
 /* Adjust button styles as needed */
+.search-container input{
+  font-size: smaller;
+
+}

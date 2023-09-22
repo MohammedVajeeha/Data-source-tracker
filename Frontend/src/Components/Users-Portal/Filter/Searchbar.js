@@ -13,7 +13,7 @@ function SearchBarComponent({ onSearch }) {
     <div className="search-container">
       <input
         type="text"
-        placeholder="Search by Project Name"
+        placeholder="Search project name"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />

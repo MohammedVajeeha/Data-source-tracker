@@ -1,0 +1,129 @@
+/* Sign-in.css */
+.main-div
+
+{
+
+    font-family: Georgia, 'Times New Roman', Times, serif;
+
+    font-size: 14px;
+
+    background-color: #f5f5f5;
+
+    padding: 20px;
+
+    border-radius: 8px;
+
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+
+    text-align: center;
+
+    margin: 20px auto;
+
+    margin-top: 100px;
+
+    max-width: 360px;
+
+}
+/* Style the outer container */
+.container {
+    width: 100%; /* Use 100% width for responsiveness */
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    margin: 20px auto;
+    margin-top: 100px;
+  }
+  
+  /* Add the animated border to the right side */
+  .container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 5px;
+    background-color: #007bff;
+    animation: borderAnimation 2s infinite;
+  }
+  
+  /* Define the border animation */
+  @keyframes borderAnimation {
+    0% {
+      background-color: #007bff;
+    }
+    50% {
+      background-color: #ff4500;
+    }
+    100% {
+      background-color: #007bff;
+    }
+  }
+  
+  /* Style the form elements */
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 5px;
+  }
+  
+  input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    width: 100%; /* Use 100% width for responsiveness */
+  }
+  
+  button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Style the "Sign Up" link */
+  p {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive Styles */
+  @media screen and (max-width: 480px) {
+    /* Adjust styles for screens with a maximum width of 480px */
+    .container {
+      padding: 10px;
+      margin-top: 50px;
+    }
+    .container::after {
+      display: none; /* Hide the animated border on smaller screens */
+    }
+    input {
+      font-size: 16px;
+    }
+    button {
+      font-size: 16px;
+    }
+  }
+  

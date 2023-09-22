@@ -36,6 +36,24 @@ router.post('/login', async (req, res) => {
 });
 
 
+//updatingg
+router.put('/projects/:id', async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const editedData = req.body;
+  
+      const updatedData = await Row.findByIdAndUpdate(id, editedData, { new: true });
+  
+      if (!updatedData) {
+        return res.status(404).json({ error: 'Data not found' });
+      }
+  
+      res.json(updatedData);
+    } catch (error) {
+      next(error);
+    }
+  });
+  
 
 // POST route for user registration
 router.post('/register', async (req, res) => {
