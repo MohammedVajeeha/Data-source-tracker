@@ -335,18 +335,16 @@ function Layout() {
 const [statusFilter, setStatusFilter] = useState('');
 const [searchQuery, setSearchQuery] = useState('');
 
-  
+const fetchData = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/auth/fetchRows');
+    setRowData(response.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8080/api/auth/fetchRows');
-        setRowData(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -373,6 +371,7 @@ const [searchQuery, setSearchQuery] = useState('');
 
   const handleSaveData = (data) => {
     console.log('Data to be saved:', data);
+    fetchData();
     setNewRowData(data);
   };
 
@@ -424,9 +423,9 @@ const [searchQuery, setSearchQuery] = useState('');
       if (response.status === 200) {
         const updatedData = data.map((row) =>
           row._id === editedRowData._id ? editedRowData : row
-        );
-
+        )
         setData(updatedData);
+        fetchData()
         setShowEditPopup(false);
       } else {
         console.error('Failed to update data.');

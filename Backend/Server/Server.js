@@ -25,9 +25,8 @@ const databaseUrl = `mongodb+srv://${username}:${password}@${clusterUrl}/${dbNam
 console.log('Database URL:', databaseUrl);
 
 mongoose.connect(databaseUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-
-  .then(() => {
-
+.then(() => {
+  
     console.log('Connected to the database');
 
   })
