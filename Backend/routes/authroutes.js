@@ -6,8 +6,22 @@ const Row = require('../models/row');
 
 const YourModel = require('../models/fetch');
 
+const TechStack=require('../models/techstack')
 
-
+app.get('/getTechStackOptions', async (req, res) => {
+    try {
+      // Fetch tech stack options from the database
+      const techStackOptions = await Row.find({}, 'techStack');
+  
+      // Extract the names and send them as JSON response
+      const techStackNames = techStackOptions.map((option) => option.techStack);
+      res.json(techStackNames);
+    } catch (error) {
+      console.error('Error fetching tech stack options:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
 // POST route for user login
 router.post('/login', async (req, res) => {
     const { username, upassword } = req.body;
