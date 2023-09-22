@@ -5,14 +5,17 @@
   align-items: center;
   gap: 10px; /* Adjust the spacing between elements */
   height: 40px; /* Set the height as needed */
-  margin-bottom: 10px; /* Add margin at the bottom for separation */
+  margin-bottom: 1px;
+  margin-top: 17px; /* Add margin at the bottom for separation */
 }
 .filter-container{
   display: flex;
+  
   align-items: center;
+
   gap: 10px; /* Adjust the spacing between elements */
   height: 40px; /* Set the height as needed */
-  margin-bottom: 10px; /* Add margin at the bottom for separation */
+  margin-bottom: 1px; /* Add margin at the bottom for separation */
 }
 
 /* Styles for select elements */
@@ -41,6 +44,7 @@
   border-radius: 4px;
   padding: 5px 10px;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 /* Hover effect for buttons */
 .filter-container button:hover,
