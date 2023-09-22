@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
+
+
 const UserModel = require('../models/users'); // Import your user model
 
 const Row = require('../models/row');
@@ -7,15 +10,21 @@ const Row = require('../models/row');
 const YourModel = require('../models/fetch');
 
 const TechStack=require('../models/techstack')
+const bodyParser = require('body-parser');
+const { set } = require('mongoose');
 
-app.get('/getTechStackOptions', async (req, res) => {
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+router.get('/techStackOptions', async (req, res) => {
     try {
-      // Fetch tech stack options from the database
-      const techStackOptions = await Row.find({}, 'techStack');
-  
-      // Extract the names and send them as JSON response
-      const techStackNames = techStackOptions.map((option) => option.techStack);
-      res.json(techStackNames);
+      let data = await Row.find({},"techStack");
+      data = data?.map(o=>o?.techStack)
+      data = [...new Set(data)]
+      res.json(data);
     } catch (error) {
       console.error('Error fetching tech stack options:', error);
       res.status(500).json({ error: 'Internal server error' });
@@ -29,7 +38,7 @@ router.post('/login', async (req, res) => {
     try {
         // Check if the user exists in the database
         const user = await UserModel.findOne({ username });
-
+        // console.log(user)
         if (!user) {
             // User not found
             return res.status(404).json({ error: 'User not registered.' });
@@ -82,7 +91,7 @@ router.post('/register', async (req, res) => {
     try {
         await newUser.save();
         res.status(200).json({ message: 'Registration successful!' });
-        console.log(newUser);
+        // console.log(newUser);
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({ error: 'Registration failed.' });
@@ -95,9 +104,32 @@ router.post('/register', async (req, res) => {
 
 router.get('/fetchRows', async (req, res) => {
     try {
-        console.log('Fetching rows...');
+      let andCon = []
+      if(req?.query?.projectName)
+      {
+        andCon?.push({"projectName":new RegExp(`.*${req?.query?.projectName}.*`, 'i')})
+      }
+      if(req?.query?.status)
+      {
+        andCon?.push({"status":req?.query?.status})
+      }
+      if(req?.query?.techStack)
+      {
+        andCon?.push({"techStack":req?.query?.techStack})
+      }
+      const filterQuery = {
+        "$and":andCon
+      }
+      if( andCon?.length )
+      {
+        const data = await Row.find(filterQuery);
+        // console.log(req?.query)
+        res.json(data);
+      }
+      else{
         const data = await Row.find();
         res.json(data);
+      }
     } catch (error) {
         console.error('Error fetching data:', error); // Add this line
         res.status(500).json({ error: 'Internal server error' });

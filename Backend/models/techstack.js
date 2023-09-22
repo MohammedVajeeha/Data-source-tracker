@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const techStackSchema = new mongoose.Schema({
     techStack: String,
   });

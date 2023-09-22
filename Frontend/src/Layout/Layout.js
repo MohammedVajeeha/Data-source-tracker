@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FilterComponent from '../Components/Users-Portal/Filter/Filter';
-import SearchBarComponent from '../Components/Users-Portal/Filter/Searchbar';
-import { Button, Modal } from '@mui/material';
+import { Autocomplete, Button, InputAdornment, Modal, TextField } from '@mui/material';
 import MyTable from '../Components/Users-Portal/Projectdetails/Project';
 import CreatePopup from '../Components/Users-Portal/Popups/CreatePopup';
 import EditPopup from '../Components/Users-Portal/Popups/EditPopup';
-
+import SearchIcon from '@mui/icons-material/Search';
 function Layout() {
   // State variables
   const [data, setData] = useState([]);
@@ -20,11 +19,18 @@ function Layout() {
   const [statusOptions, setStatusOptions] = useState([]);
   const [techStackFilter, setTechStackFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState({
+    projectName:"",
+    techStack:"",
+    status:""
+  });
 
 const fetchData = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/auth/fetchRows');
+    var headers = {
+      "Content-type": "application/json",
+      };
+    const response = await axios.get('http://localhost:8080/api/auth/fetchRows',{params:searchQuery,headers});
     setRowData(response.data);
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -34,6 +40,10 @@ const fetchData = async () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(()=>{
+      fetchData();
+  },[searchQuery])
 
   // Handle editing a row
   const handleEditClick = (row) => {
@@ -117,9 +127,12 @@ const fetchData = async () => {
   useEffect(() => {
     const fetchTechStackOptions = async () => {
       try {
-        const response = await fetch('/api/auth/techStackOptions');
-        const data = await response.json();
-        setTechStackOptions(data);
+        // const response = await axios.get('http://localhost:8080/api/auth/techStackOptions');
+        axios.get('http://localhost:8080/api/auth/techStackOptions')?.then((resp)=>{
+        setTechStackOptions(()=>resp?.data);
+      }).catch((error)=>{
+        console.error(error)
+      });
       } catch (error) {
         console.error('Error fetching tech stack options:', error);
       }
@@ -127,6 +140,10 @@ const fetchData = async () => {
 
     fetchTechStackOptions();
   }, []);
+
+  useEffect(()=>{
+    console.info(techStackFilter,"sample")
+  },[techStackFilter])
 
   // Handle filtering
   const handleFilter = (techStack, status) => {
@@ -141,8 +158,8 @@ const fetchData = async () => {
   };
 
   // Handle searching
-  const handleSearch = (query) => {
-    setSearchQuery(query);
+  const handleSearch = (key,value) => {
+    setSearchQuery((prev)=>({...prev,[key]:value}));
   };
 
   return (
@@ -153,33 +170,75 @@ const fetchData = async () => {
           padding: "10px 5px",
           borderRadius: "8px",
           boxShadow: "1px 1px 16px #00000020",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: "5px",
+          display:"grid",
+          gridTemplateColumns:"1fr 1fr 1fr",
+          gap:"20px"
         }}
       >
-        <FilterComponent
+        <Button variant='contained' onClick={handleCreateClick} style={{width:"100px"}} >
+          Create
+        </Button>
+        <TextField
+          size='small'
+          placeholder='Search by Project Name'
+          value={searchQuery?.projectName}
+          onChange={(e)=>{handleSearch("projectName",e.target.value)}}
+         InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <SearchIcon />
+            </InputAdornment>
+          ),
+        }}
+          
+           />
+
+        {/* <FilterComponent
           techStackOptions={techStackOptions}
           statusOptions={statusOptions}
           onFilter={handleFilter}
           onCancel={handleCancel}
           initialStatus="inprogress" // Set the initial status here
-        />
-        <SearchBarComponent
-          onSearch={handleSearch}
-        />
-        <Button variant='contained' onClick={handleCreateClick}>
-          Create
-        </Button>
+        /> */}
+
+        <div style={{
+          display:"grid",
+          gridTemplateColumns:"1fr 1fr",
+          gap:"10px"
+        }} >
+        <Autocomplete
+          size='small'
+
+            disablePortal
+            id="combo-box-demo"
+            options={techStackOptions?.map((o)=>({label:o?.toUpperCase(),value:o}))}
+            // sx={{ width: 300 }}
+            onChange={(e,value)=>{handleSearch("techStack",value?.value)  }}
+            renderInput={(params) => <TextField {...params} label="Filter Tech Stack" />}
+          />
+        <Autocomplete
+          size='small'
+            disablePortal
+            id="combo-box-demo"
+            options={[{label:"Completed",value:"COMPLETED"},
+            {label:"In Progress",value:"INPROGRESS"},
+            {label:"Pending",value:"PENDING"}
+            ]}
+            onChange={(e,value)=>{handleSearch("status",value?.value)  }}
+            // sx={{ width: 300 }}
+            renderInput={(params) => <TextField {...params} label="Filter Status" />}
+          />
+        </div>
+
+
       </div>
 
       <MyTable
         data={rowData}
-        onFilter={handleFilter}
-        onCancel={handleCancel}
-        onSearch={handleSearch}
-        techStackOptions={techStackOptions}
+        // onFilter={handleFilter}
+        // onCancel={handleCancel}
+        // onSearch={handleSearch}
+        // // techStackOptions={techStackOptions}
         statusOptions={statusOptions}
         onEditClick={handleEditClick}
         onDeleteClick={async (row) => {

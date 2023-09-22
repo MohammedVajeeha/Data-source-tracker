@@ -4,7 +4,8 @@ import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
+
 
 function CreatePopup({ onSave, onClose, initialData }) {
   const [newRowData, setNewRowData] = useState(initialData || {
@@ -29,9 +30,9 @@ function CreatePopup({ onSave, onClose, initialData }) {
   }, [initialData]);
 
   const statusOptions = [
-    { label: 'In Progress', value: 'inprogress' },
-    { label: 'Completed', value: 'completed' },
-    { label: 'Pending', value: 'pending' },
+    { label: 'In Progress', value: 'INPROGRESS' },
+    { label: 'Completed', value: 'COMPLETED' },
+    { label: 'Pending', value: 'PENDING' },
   ];
 
   const handleInputChange = (e) => {
@@ -99,7 +100,10 @@ function CreatePopup({ onSave, onClose, initialData }) {
       <form>
         <div className="form-group">
           <label htmlFor="projectName">Project Name</label>
-          <input
+          <TextField
+          fullWidth
+          
+          size='small'
             type="text"
             id="projectName"
             name="projectName"
@@ -110,7 +114,10 @@ function CreatePopup({ onSave, onClose, initialData }) {
         </div>
         <div className="form-group">
           <label htmlFor="projectManagerName">Project Manager Name</label>
-          <input
+          <TextField
+          size='small'
+          fullWidth
+
             type="text"
             id="projectManagerName"
             name="projectManagerName"
@@ -119,10 +126,11 @@ function CreatePopup({ onSave, onClose, initialData }) {
             required // Add HTML5 validation for required field
           />
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"40px"}} >
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"40px",paddingRight:"10px"}} >
         <div className="form-group">
           <label htmlFor="startTime">Start Date</label>
           <DatePicker
+          wrapperClassName="datePicker"
             id="startTime"
             selected={newRowData.startTime}
             onChange={(date) => handleDateChange('startTime', date)}
@@ -133,6 +141,7 @@ function CreatePopup({ onSave, onClose, initialData }) {
         <div className="form-group">
           <label htmlFor="endTime">End Date</label>
           <DatePicker
+          wrapperClassName="datePicker"
             id="endTime"
             selected={newRowData.endTime}
             onChange={(date) => handleDateChange('endTime', date)}
@@ -155,7 +164,9 @@ function CreatePopup({ onSave, onClose, initialData }) {
         </div>
         <div className="form-group">
           <label htmlFor="techStack">Tech Stack</label>
-          <input
+          <TextField
+          fullWidth
+          size='small'
             type="text"
             id="techStack"
             name="techStack"

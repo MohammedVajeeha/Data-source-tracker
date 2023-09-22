@@ -23,12 +23,6 @@ label {
   margin-bottom: 5px;
 }
 
-input[type="text"] {
-  width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
 
 .form-actions {
   display: flex;
@@ -56,4 +50,14 @@ button:hover {
 
 .react-datepicker-wrapper {
   width: 100%;
+}
+
+.datePicker input{
+  height: 30px;
+  width: 100%;
+  outline: none;
+  border:1px solid rgba(128, 128, 128, 0.658);
+  border-radius: 3px;
+  padding: 5px;
+  font-size: 16px;
 }
