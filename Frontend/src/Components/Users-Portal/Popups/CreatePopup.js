@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './Popup.css';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
@@ -18,7 +18,6 @@ function CreatePopup({ onSave, onClose, initialData }) {
   });
 
   useEffect(() => {
-    // Update the newRowData state when initialData changes (e.g., when reopening the popup)
     setNewRowData(initialData || {
       projectName: '',
       projectManagerName: '',
@@ -49,7 +48,6 @@ function CreatePopup({ onSave, onClose, initialData }) {
   };
 
   const handleCreate = () => {
-    // Check if all required fields are filled
     if (
       newRowData.projectName &&
       newRowData.projectManagerName &&
@@ -60,29 +58,24 @@ function CreatePopup({ onSave, onClose, initialData }) {
       const startTime = new Date(newRowData.startTime);
       const endTime = new Date(newRowData.endTime);
 
-      // Check if the end date is greater than or equal to the start date
       if (startTime <= endTime) {
-        // Prepare the data to send to the backend
         const dataToSend = {
           projectName: newRowData.projectName,
           projectManagerName: newRowData.projectManagerName,
-          status: newRowData.status.value, // Use .value to get the selected value from the Select component
+          status: newRowData.status.value,
           startTime: startTime.toISOString(),
           endTime: endTime.toISOString(),
           techStack: newRowData.techStack,
         };
 
-        // Send data to the backend API
         axios
           .post('http://localhost:8080/api/auth/createRow', dataToSend)
           .then((response) => {
-            // Handle successful response
             console.log('Data saved successfully:', response.data);
             onSave(newRowData);
             onClose();
           })
           .catch((error) => {
-            // Handle error
             console.error('Error while creating data:', error);
             alert('Error while saving data. Please try again later.');
           });
@@ -95,7 +88,7 @@ function CreatePopup({ onSave, onClose, initialData }) {
   };
 
   return (
-    <div className="popup" style={{borderRadius:"8px"}} >
+    <div className="popup" style={{ borderRadius: "8px" }}>
       <h2>Create New Row</h2>
       <form>
         <div className="form-group">
@@ -109,7 +102,7 @@ function CreatePopup({ onSave, onClose, initialData }) {
             name="projectName"
             value={newRowData.projectName}
             onChange={handleInputChange}
-            required // Add HTML5 validation for required field
+            required
           />
         </div>
         <div className="form-group">
@@ -123,7 +116,7 @@ function CreatePopup({ onSave, onClose, initialData }) {
             name="projectManagerName"
             value={newRowData.projectManagerName}
             onChange={handleInputChange}
-            required // Add HTML5 validation for required field
+            required
           />
         </div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"40px",paddingRight:"10px"}} >
@@ -150,7 +143,6 @@ function CreatePopup({ onSave, onClose, initialData }) {
           />
         </div>
         </div>
-
         <div className="form-group">
           <label htmlFor="status">Status</label>
           <Select
@@ -159,7 +151,7 @@ function CreatePopup({ onSave, onClose, initialData }) {
             value={newRowData.status}
             options={statusOptions}
             onChange={handleStatusChange}
-            required // Add HTML5 validation for required field
+            required
           />
         </div>
         <div className="form-group">
@@ -175,10 +167,10 @@ function CreatePopup({ onSave, onClose, initialData }) {
           />
         </div>
         <div className="form-actions  ">
-          <Button variant='outlined'  onClick={onClose}>
+          <Button variant='outlined' onClick={onClose}>
             Close
           </Button>
-          <Button variant='contained'  onClick={handleCreate}>
+          <Button variant='contained' onClick={handleCreate}>
             Create
           </Button>
         </div>
