@@ -9,9 +9,16 @@ function Router() {
     <div className="App">
      <BrowserRouter>
       <Routes>
+      
+        {
+          localStorage?.getItem("token") !="" && localStorage?.getItem("token") !="undefined"  ? 
         <Route path="/" element={<Login />} /> 
+          :
+          <>
+        <Route path="/" element={<Layout />} />
         <Route path="/register" element={<Registration />} /> 
-        <Route path="/table" element={<Layout />} />
+          </>
+        }
       
 
           </Routes>

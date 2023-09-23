@@ -42,6 +42,15 @@ function Layout() {
         "http://localhost:8080/api/auth/fetchRows",
         { params: searchQuery, headers: headers }
       );
+
+      
+      if(response?.status == 401)
+      {
+        localStorage.clear();
+        window.open("/")
+      }
+
+
       setRowData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
