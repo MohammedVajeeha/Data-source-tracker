@@ -283,11 +283,6 @@ function Layout() {
         }}
       />
 
-      {showCreatePopup && (
-        <CreatePopup
-          onClose={handleCloseCreatePopup}
-        />
-      )}
 
       {showEditPopup && selectedRow && (
         <Modal
@@ -309,6 +304,8 @@ function Layout() {
               data={selectedRow}
               onSave={handleSaveEditPopup}
               onClose={handleCloseEditPopup}
+          	  fetchData={fetchData}
+
             />
           </div>
         </Modal>
@@ -334,6 +331,8 @@ function Layout() {
               onSave={handleSaveData}
               onClose={handleClosePopup}
               initialData={newRowData}
+              fetchData={fetchData}
+
             />
           </div>
         </Modal>

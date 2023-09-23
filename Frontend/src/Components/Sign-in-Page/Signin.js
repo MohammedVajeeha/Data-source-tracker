@@ -99,7 +99,7 @@ function Login() {
                 alert('Login successful!');
 
                 // Navigate to the table page after successful login
-                navigate('/table'); // Use the navigate function
+                navigate('/'); // Use the navigate function
             } else {
                 alert('Authentication failed. Please check your credentials.');
             }

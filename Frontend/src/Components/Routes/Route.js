@@ -12,10 +12,10 @@ function Router() {
       
         {
           localStorage?.getItem("token") !="" && localStorage?.getItem("token") !="undefined"  ? 
-        <Route path="/" element={<Login />} /> 
+        <Route path="/" element={<Layout />} />
           :
           <>
-        <Route path="/" element={<Layout />} />
+        <Route path="/" element={<Login />} /> 
         <Route path="/register" element={<Registration />} /> 
           </>
         }

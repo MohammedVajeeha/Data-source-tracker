@@ -7,7 +7,7 @@ import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 
 
-function CreatePopup({ onClose, initialData }) {
+function CreatePopup({ onClose, initialData , fetchData=()=>{} }) {
   const [newRowData, setNewRowData] = useState(initialData || {
     projectName: '',
     projectManagerName: '',
@@ -76,7 +76,7 @@ function CreatePopup({ onClose, initialData }) {
           .post('http://localhost:8080/api/auth/createRow', dataToSend,{headers})
           .then((response) => {
             console.log('Data saved successfully:', response.data);
-
+            fetchData();
             onClose();
           })
           .catch((error) => {
