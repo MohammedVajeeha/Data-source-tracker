@@ -266,17 +266,16 @@ function Layout() {
         // onCancel={handleCancel}
         // onSearch={handleSearch}
         // // techStackOptions={techStackOptions}
+          fetchData={fetchData}
         statusOptions={statusOptions}
         onEditClick={handleEditClick}
         onDeleteClick={async (row) => {
           try {
             await axios.delete(
               `http://localhost:8080/api/auth/delete/${row._id}`
-            );
-            const updatedData = await axios.get(
-              "http://localhost:8080/api/auth/fetchRows"
-            );
-            setData(updatedData.data);
+            )?.then((resp)=>{
+              fetchData() 
+            }).catch(error=>alert(JSON.stringify(error)))
           } catch (error) {
             console.log("Error deleting data:", error);
           }
