@@ -84,6 +84,11 @@ function Layout() {
     });
   };
 
+  const logout = () => {
+    localStorage.removeItem("token"); // Remove the JWT token
+    window.location.reload(); // Reload the page
+  };
+
   // Handle closing the create popup
   const handleClosePopup = () => {
     setCreatePopupVisible(false);
@@ -182,7 +187,7 @@ function Layout() {
           borderRadius: "8px",
           boxShadow: "1px 1px 16px #00000020",
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateColumns: "1fr 1fr 1fr auto", // Add "auto" for the Logout button
           gap: "20px",
         }}
       >
@@ -193,6 +198,7 @@ function Layout() {
         >
           Create
         </Button>
+
         <TextField
           size="small"
           placeholder="Search by Project Name"
@@ -232,7 +238,6 @@ function Layout() {
               label: o?.toUpperCase(),
               value: o,
             }))}
-            // sx={{ width: 300 }}
             onChange={(e, value) => {
               handleSearch("techStack", value?.value);
             }}
@@ -252,12 +257,15 @@ function Layout() {
             onChange={(e, value) => {
               handleSearch("status", value?.value);
             }}
-            // sx={{ width: 300 }}
             renderInput={(params) => (
               <TextField {...params} label="Filter Status" />
             )}
           />
         </div>
+
+        <Button variant="contained" onClick={logout} style={{ width: "100px" }}>
+          Logout
+        </Button>
       </div>
 
       <MyTable
@@ -266,22 +274,22 @@ function Layout() {
         // onCancel={handleCancel}
         // onSearch={handleSearch}
         // // techStackOptions={techStackOptions}
-          fetchData={fetchData}
+        fetchData={fetchData}
         statusOptions={statusOptions}
         onEditClick={handleEditClick}
         onDeleteClick={async (row) => {
           try {
-            await axios.delete(
-              `http://localhost:8080/api/auth/delete/${row._id}`
-            )?.then((resp)=>{
-              fetchData() 
-            }).catch(error=>alert(JSON.stringify(error)))
+            await axios
+              .delete(`http://localhost:8080/api/auth/delete/${row._id}`)
+              ?.then((resp) => {
+                fetchData();
+              })
+              .catch((error) => alert(JSON.stringify(error)));
           } catch (error) {
             console.log("Error deleting data:", error);
           }
         }}
       />
-
 
       {showEditPopup && selectedRow && (
         <Modal
@@ -303,8 +311,7 @@ function Layout() {
               data={selectedRow}
               onSave={handleSaveEditPopup}
               onClose={handleCloseEditPopup}
-          	  fetchData={fetchData}
-
+              fetchData={fetchData}
             />
           </div>
         </Modal>
@@ -331,7 +338,6 @@ function Layout() {
               onClose={handleClosePopup}
               initialData={newRowData}
               fetchData={fetchData}
-
             />
           </div>
         </Modal>
