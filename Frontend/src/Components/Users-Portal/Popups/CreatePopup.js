@@ -7,7 +7,7 @@ import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 
 
-function CreatePopup({ onSave, onClose, initialData }) {
+function CreatePopup({ onClose, initialData }) {
   const [newRowData, setNewRowData] = useState(initialData || {
     projectName: '',
     projectManagerName: '',
@@ -68,11 +68,15 @@ function CreatePopup({ onSave, onClose, initialData }) {
           techStack: newRowData.techStack,
         };
 
+        const headers = {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        };
         axios
-          .post('http://localhost:8080/api/auth/createRow', dataToSend)
+          .post('http://localhost:8080/api/auth/createRow', dataToSend,{headers})
           .then((response) => {
             console.log('Data saved successfully:', response.data);
-            onSave(newRowData);
+
             onClose();
           })
           .catch((error) => {

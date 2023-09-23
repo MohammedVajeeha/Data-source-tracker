@@ -1,8 +1,7 @@
+const jwt = require('jsonwebtoken')
 const express = require('express');
 const router = express.Router();
 const cors = require('cors');
-
-
 const UserModel = require('../models/users'); // Import your user model
 
 const Row = require('../models/row');
@@ -36,22 +35,37 @@ router.post('/login', async (req, res) => {
     const { username, upassword } = req.body;
 
     try {
+      console.log(req?.body)
         // Check if the user exists in the database
         const user = await UserModel.findOne({ username });
-        // console.log(user)
+        console.log(user)
         if (!user) {
             // User not found
             return res.status(404).json({ error: 'User not registered.' });
         }
 
         // Check if the password is correct
-        if (user.password !== upassword) {
+        if (user.password != upassword) {
             // Incorrect password
             return res.status(401).json({ error: 'Authentication failed. Incorrect password.' });
         }
+        console.log(user)
+        
+          let token = {
 
-        // Authentication successful
-        res.status(200).json({ message: 'Login successful!' });
+            payload:{
+              email:user?.email,
+            },
+            exp:"3d"
+          }
+          jwt.sign(token.payload, "s", { expiresIn: token.exp }, function (err, token) {
+            if (err) {
+              res.status(401).json({ message: 'Unauthorised' });
+            } else {
+              res.status(200).json({ message: 'Login successful!',token:token });
+            }
+        });
+        // res.status(200).json({ message: 'Login successful!' });
     } catch (error) {
         console.error('Error authenticating user:', error);
         res.status(500).json({ error: 'Authentication failed. Please try again later.' });
@@ -103,37 +117,48 @@ router.post('/register', async (req, res) => {
 // Fetch all rows from MongoDB
 
 router.get('/fetchRows', async (req, res) => {
-    try {
-      let andCon = []
-      if(req?.query?.projectName)
-      {
-        andCon?.push({"projectName":new RegExp(`.*${req?.query?.projectName}.*`, 'i')})
-      }
-      if(req?.query?.status)
-      {
-        andCon?.push({"status":req?.query?.status})
-      }
-      if(req?.query?.techStack)
-      {
-        andCon?.push({"techStack":req?.query?.techStack})
-      }
-      const filterQuery = {
-        "$and":andCon
-      }
-      if( andCon?.length )
-      {
-        const data = await Row.find(filterQuery);
-        // console.log(req?.query)
-        res.json(data);
-      }
-      else{
-        const data = await Row.find();
-        res.json(data);
-      }
-    } catch (error) {
-        console.error('Error fetching data:', error); // Add this line
-        res.status(500).json({ error: 'Internal server error' });
-    }
+       jwt.verify(req?.headers?.authorization?.split(" ")[1], "s",async function (err, decoded) {
+          if (err) {
+            res.status(401).json({ error: 'unAutherized' });
+          } else {
+
+
+
+            try {
+              let andCon = []
+              if(req?.query?.projectName)
+              {
+                andCon?.push({"projectName":new RegExp(`.*${req?.query?.projectName}.*`, 'i')})
+              }
+              if(req?.query?.status)
+              {
+                andCon?.push({"status":req?.query?.status})
+              }
+              if(req?.query?.techStack)
+              {
+                andCon?.push({"techStack":req?.query?.techStack})
+              }
+              andCon?.push({"email":decoded?.email})
+              
+              console.log(andCon)
+
+              const filterQuery = {
+                "$and":andCon
+              }
+              
+                const data = await Row.find(filterQuery);
+                res.json(data);
+              
+            } catch (error) {
+                console.error('Error fetching data:', error); // Add this line
+                res.status(500).json({ error: 'Internal server error' });
+            }
+
+
+          }
+      });
+
+
 });
 router.delete('/delete/:id', async (req, res) => {
     try {
@@ -157,11 +182,16 @@ router.delete('/delete/:id', async (req, res) => {
 
 
 // Create a new row
-router.post('/createRow', async (req, res) => {
-    try {
+router.post('/createRow', async (req, res) => { 
+   jwt.verify(req?.headers?.authorization?.split(" ")[1], "s",async function (err, decoded) {
+      if (err) {
+        res.status(401).json({ error: 'unAutherized' });
+      } else {
+  if(decoded?.email){
+  try {
         // Create a new instance of the data model with the request body
-        const newRow = new Row(req.body);
-
+        console.log(req.body)
+        const newRow = new Row({...req.body,email:decoded?.email});
         // Save the new row to the database
         await newRow.save();
 
@@ -170,8 +200,9 @@ router.post('/createRow', async (req, res) => {
     } catch (error) {
         console.error('Error creating row:', error);
         res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
+    }}
+  }
+})})
 
 
 module.exports = router;

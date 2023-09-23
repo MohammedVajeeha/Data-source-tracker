@@ -8,6 +8,7 @@ const rowSchema = new mongoose.Schema({
   endTime: Date,
   techStack: String,
   status: String,
+  email:String
 });
 
 

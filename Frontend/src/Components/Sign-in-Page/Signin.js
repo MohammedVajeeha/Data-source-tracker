@@ -94,6 +94,8 @@ function Login() {
 
             if (response.status === 200) {
                 setIsLoggedIn(true);
+                console.info(response)
+                localStorage.setItem("token",response?.data?.token)
                 alert('Login successful!');
 
                 // Navigate to the table page after successful login

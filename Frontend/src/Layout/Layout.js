@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import FilterComponent from '../Components/Users-Portal/Filter/Filter';
-import { Autocomplete, Button, InputAdornment, Modal, TextField } from '@mui/material';
-import MyTable from '../Components/Users-Portal/Projectdetails/Project';
-import CreatePopup from '../Components/Users-Portal/Popups/CreatePopup';
-import EditPopup from '../Components/Users-Portal/Popups/EditPopup';
-import SearchIcon from '@mui/icons-material/Search';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import FilterComponent from "../Components/Users-Portal/Filter/Filter";
+import {
+  Autocomplete,
+  Button,
+  InputAdornment,
+  Modal,
+  TextField,
+} from "@mui/material";
+import MyTable from "../Components/Users-Portal/Projectdetails/Project";
+import CreatePopup from "../Components/Users-Portal/Popups/CreatePopup";
+import EditPopup from "../Components/Users-Portal/Popups/EditPopup";
+import SearchIcon from "@mui/icons-material/Search";
 function Layout() {
   // State variables
   const [data, setData] = useState([]);
@@ -17,33 +23,38 @@ function Layout() {
   const [rowData, setRowData] = useState([]);
   const [techStackOptions, setTechStackOptions] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
-  const [techStackFilter, setTechStackFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [techStackFilter, setTechStackFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState({
-    projectName:"",
-    techStack:"",
-    status:""
+    projectName: "",
+    techStack: "",
+    status: "",
   });
 
-const fetchData = async () => {
-  try {
-    var headers = {
-      "Content-type": "application/json",
+  const fetchData = async () => {
+    try {
+      const headers = {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       };
-    const response = await axios.get('http://localhost:8080/api/auth/fetchRows',{params:searchQuery,headers});
-    setRowData(response.data);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
+
+      const response = await axios.get(
+        "http://localhost:8080/api/auth/fetchRows",
+        { params: searchQuery, headers: headers }
+      );
+      setRowData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(()=>{
-      fetchData();
-  },[searchQuery])
+  useEffect(() => {
+    fetchData();
+  }, [searchQuery]);
 
   // Handle editing a row
   const handleEditClick = (row) => {
@@ -55,11 +66,11 @@ const fetchData = async () => {
   const handleCreateClick = () => {
     setCreatePopupVisible(true);
     setNewRowData({
-      projectName: '',
-      projectManagerName: '',
+      projectName: "",
+      projectManagerName: "",
       startTime: null,
       endTime: null,
-      techStack: '',
+      techStack: "",
       status: null,
     });
   };
@@ -71,7 +82,7 @@ const fetchData = async () => {
 
   // Handle saving data
   const handleSaveData = (data) => {
-    console.log('Data to be saved:', data);
+    console.log("Data to be saved:", data);
     fetchData();
     setNewRowData(data);
   };
@@ -87,18 +98,7 @@ const fetchData = async () => {
     setSelectedRow(null);
   };
 
-  // Handle saving data when creating a new row
-  const handleSaveCreatePopup = async (newRowData) => {
-    try {
-      const response = await axios.post('http://localhost:8080/api/auth/createRow', newRowData);
-      console.log('Newly created data:', response.data);
 
-      const updatedData = await axios.get('http://localhost:8080/api/auth/fetchRows');
-      setData(updatedData.data);
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
 
   // Handle saving data when editing a row
   const handleSaveEditPopup = async (editedRowData) => {
@@ -111,15 +111,15 @@ const fetchData = async () => {
       if (response.status === 200) {
         const updatedData = data.map((row) =>
           row._id === editedRowData._id ? editedRowData : row
-        )
+        );
         setData(updatedData);
-        fetchData()
+        fetchData();
         setShowEditPopup(false);
       } else {
-        console.error('Failed to update data.');
+        console.error("Failed to update data.");
       }
     } catch (error) {
-      console.error('Error updating data:', error);
+      console.error("Error updating data:", error);
     }
   };
 
@@ -127,71 +127,78 @@ const fetchData = async () => {
   useEffect(() => {
     const fetchTechStackOptions = async () => {
       try {
+        const headers = {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        };
         // const response = await axios.get('http://localhost:8080/api/auth/techStackOptions');
-        axios.get('http://localhost:8080/api/auth/techStackOptions')?.then((resp)=>{
-        setTechStackOptions(()=>resp?.data);
-      }).catch((error)=>{
-        console.error(error)
-      });
+        axios
+          .get("http://localhost:8080/api/auth/techStackOptions", { headers })
+          ?.then((resp) => {
+            setTechStackOptions(() => resp?.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       } catch (error) {
-        console.error('Error fetching tech stack options:', error);
+        console.error("Error fetching tech stack options:", error);
       }
     };
 
     fetchTechStackOptions();
   }, []);
 
-  useEffect(()=>{
-    console.info(techStackFilter,"sample")
-  },[techStackFilter])
-
-  // Handle filtering
-  const handleFilter = (techStack, status) => {
-    setTechStackFilter(techStack);
-    setStatusFilter(status);
-  };
-
-  // Handle canceling filters
-  const handleCancel = () => {
-    setTechStackFilter('');
-    setStatusFilter('');
-  };
+  useEffect(() => {
+    console.info(techStackFilter, "sample");
+  }, [techStackFilter]);
 
   // Handle searching
-  const handleSearch = (key,value) => {
-    setSearchQuery((prev)=>({...prev,[key]:value}));
+  const handleSearch = (key, value) => {
+    setSearchQuery((prev) => ({ ...prev, [key]: value }));
   };
 
   return (
-    <div className="" style={{ padding: "20px 15px", display: "flex", flexDirection: "column", gap: "10px" }}>
+    <div
+      className=""
+      style={{
+        padding: "20px 15px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
+      }}
+    >
       <div
         style={{
           background: "#fff",
           padding: "10px 5px",
           borderRadius: "8px",
           boxShadow: "1px 1px 16px #00000020",
-          display:"grid",
-          gridTemplateColumns:"1fr 1fr 1fr",
-          gap:"20px"
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gap: "20px",
         }}
       >
-        <Button variant='contained' onClick={handleCreateClick} style={{width:"100px"}} >
+        <Button
+          variant="contained"
+          onClick={handleCreateClick}
+          style={{ width: "100px" }}
+        >
           Create
         </Button>
         <TextField
-          size='small'
-          placeholder='Search by Project Name'
+          size="small"
+          placeholder="Search by Project Name"
           value={searchQuery?.projectName}
-          onChange={(e)=>{handleSearch("projectName",e.target.value)}}
-         InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-          
-           />
+          onChange={(e) => {
+            handleSearch("projectName", e.target.value);
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
 
         {/* <FilterComponent
           techStackOptions={techStackOptions}
@@ -201,36 +208,47 @@ const fetchData = async () => {
           initialStatus="inprogress" // Set the initial status here
         /> */}
 
-        <div style={{
-          display:"grid",
-          gridTemplateColumns:"1fr 1fr",
-          gap:"10px"
-        }} >
-        <Autocomplete
-          size='small'
-
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "10px",
+          }}
+        >
+          <Autocomplete
+            size="small"
             disablePortal
             id="combo-box-demo"
-            options={techStackOptions?.map((o)=>({label:o?.toUpperCase(),value:o}))}
+            options={techStackOptions?.map((o) => ({
+              label: o?.toUpperCase(),
+              value: o,
+            }))}
             // sx={{ width: 300 }}
-            onChange={(e,value)=>{handleSearch("techStack",value?.value)  }}
-            renderInput={(params) => <TextField {...params} label="Filter Tech Stack" />}
+            onChange={(e, value) => {
+              handleSearch("techStack", value?.value);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="Filter Tech Stack" />
+            )}
           />
-        <Autocomplete
-          size='small'
+          <Autocomplete
+            size="small"
             disablePortal
             id="combo-box-demo"
-            options={[{label:"Completed",value:"COMPLETED"},
-            {label:"In Progress",value:"INPROGRESS"},
-            {label:"Pending",value:"PENDING"}
+            options={[
+              { label: "Completed", value: "COMPLETED" },
+              { label: "In Progress", value: "INPROGRESS" },
+              { label: "Pending", value: "PENDING" },
             ]}
-            onChange={(e,value)=>{handleSearch("status",value?.value)  }}
+            onChange={(e, value) => {
+              handleSearch("status", value?.value);
+            }}
             // sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Filter Status" />}
+            renderInput={(params) => (
+              <TextField {...params} label="Filter Status" />
+            )}
           />
         </div>
-
-
       </div>
 
       <MyTable
@@ -243,17 +261,23 @@ const fetchData = async () => {
         onEditClick={handleEditClick}
         onDeleteClick={async (row) => {
           try {
-            await axios.delete(`http://localhost:8080/api/auth/delete/${row._id}`);
-            const updatedData = await axios.get('http://localhost:8080/api/auth/fetchRows');
+            await axios.delete(
+              `http://localhost:8080/api/auth/delete/${row._id}`
+            );
+            const updatedData = await axios.get(
+              "http://localhost:8080/api/auth/fetchRows"
+            );
             setData(updatedData.data);
           } catch (error) {
-            console.log('Error deleting data:', error);
+            console.log("Error deleting data:", error);
           }
         }}
       />
 
       {showCreatePopup && (
-        <CreatePopup onSave={handleSaveCreatePopup} onClose={handleCloseCreatePopup} />
+        <CreatePopup
+          onClose={handleCloseCreatePopup}
+        />
       )}
 
       {showEditPopup && selectedRow && (
@@ -263,13 +287,15 @@ const fetchData = async () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <div style={{
-            height: "100vh",
-            width: "100vw",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-          }} >
+          <div
+            style={{
+              height: "100vh",
+              width: "100vw",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <EditPopup
               data={selectedRow}
               onSave={handleSaveEditPopup}
@@ -286,13 +312,15 @@ const fetchData = async () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <div style={{
-            height: "100vh",
-            width: "100vw",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
-          }} >
+          <div
+            style={{
+              height: "100vh",
+              width: "100vw",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <CreatePopup
               onSave={handleSaveData}
               onClose={handleClosePopup}
