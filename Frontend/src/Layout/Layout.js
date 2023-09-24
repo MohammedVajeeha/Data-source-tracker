@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import FilterComponent from "../Components/Users-Portal/Filter/Filter";
 import {
   Autocomplete,
@@ -83,10 +84,12 @@ function Layout() {
       status: null,
     });
   };
-
+  const usenavigate = useNavigate()
   const logout = () => {
-    localStorage.removeItem("token"); // Remove the JWT token
+    localStorage.clear(); // Remove the JWT token
     window.location.reload(); // Reload the page
+    
+    console.log("hhh")
   };
 
   // Handle closing the create popup
@@ -263,7 +266,7 @@ function Layout() {
           />
         </div>
 
-        <Button variant="contained" onClick={logout} style={{ width: "100px" }}>
+        <Button variant="contained" onClick={()=>logout()} style={{ width: "100px" }}>
           Logout
         </Button>
       </div>

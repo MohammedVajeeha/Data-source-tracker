@@ -2,6 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Sign-up.css';
+import { Typography, Button, Container, Grid } from '@mui/material';
+import TextField from '@mui/material/TextField';
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './Sign-up.css'; // Import common CSS
 
 function Registration() {
     const [username, setUsername] = useState('');
@@ -33,65 +39,96 @@ function Registration() {
 
             if (response.status === 200) {
                 setIsRegistered(true);
-                alert('Registration successful!');
+
+                // Use Toastify to display success message for registration
+                toast.success('Registration successful!', {
+                    autoClose: 3000, // Automatically close the toast after 3 seconds
+                    position: 'top-right',
+                });
+
                 // Navigate to the login page after successful registration
                 navigate('/login');
             } else {
-                alert('Registration failed.');
+                // Use Toastify to display error message for registration failure
+                toast.error('Registration failed. Please try again later.', {
+                    autoClose: 3000, // Automatically close the toast after 3 seconds
+                    position: 'top-right',
+                });
             }
         } catch (error) {
-            console.log('Error registering user:', error);
-            alert('Registration failed.');
+            console.error('Error registering user:', error);
+            // Use Toastify to display error message for registration failure
+            toast.error('Registration failed. Please try again later.', {
+                autoClose: 3000, // Automatically close the toast after 3 seconds
+                position: 'top-right',
+            });
         }
     };
 
-    if (isRegistered) {
-        return <div>You are already registered!</div>;
-    }
-
     return (
-        <div className="main-div">
-            <h2>User Registration</h2>
+        <Container maxWidth="md">
+        <div className="RightSection">
+          <div className="SigninForm">
+            <Typography variant="h4" align="center">
+              User Registration
+            </Typography>
             <form onSubmit={handleFormSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={username}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={email}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <button type="submit" className="button">Register</button>
-                </div>
+              <div className="input-group">
+                <i className="fa fa-user" />
+                <TextField
+                  type="text"
+                  id="username"
+                  name="username"
+                  
+                  value={username}
+                  onChange={handleInputChange}
+                  label="Username"
+                  fullWidth
+                  variant="outlined"
+                />
+              </div>
+              <div className="input-group">
+                <i className="fa fa-envelope" />
+                <TextField
+                  type="email"
+                  id="email"
+                  name="email"
+                  
+                  value={email}
+                  onChange={handleInputChange}
+                  label="Email"
+                  fullWidth
+                  variant="outlined"
+                />
+              </div>
+              <div className="input-group">
+                <i className="fa fa-lock" />
+                <TextField
+                  type="password"
+                  id="password"
+                  name="password"
+              
+                  value={password}
+                  onChange={handleInputChange}
+                  label="Password"
+                  fullWidth
+                  variant="outlined"
+                />
+              </div>
+              <Button type="submit" className="btn1-signin">
+                Register
+              </Button>
             </form>
-            <div>
-                <p>Have an account? <Link to="/">Login</Link></p>
+            <div className="SignInLink">
+              <p>
+                Have an account? <Link to="/">Login</Link>
+              </p>
             </div>
+          </div>
         </div>
+      </Container>
     );
-}
+  }
+
 
 export default Registration;

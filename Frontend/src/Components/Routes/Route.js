@@ -5,18 +5,26 @@ import Registration from '../Sign-up-Page/Signup';
 import Layout from '../../Layout/Layout';
 //import MyTable from '../Users-Portal/Projectdetails/Project';
 function Router() {
+  
   return (
     <div className="App">
      <BrowserRouter>
       <Routes>
+        
       
         {
-          localStorage?.getItem("token") !="" && localStorage?.getItem("token") !="undefined"  ? 
-        <Route path="/" element={<Layout />} />
+          localStorage?.getItem("token") !="" && localStorage?.getItem("token") !="undefined" && localStorage?.getItem("token") != null  ? 
+          <>
+          <Route path="/" element={<Layout />}/>
+
+        <Route path="*" element={<Layout />}/>
+        </>
+       
           :
           <>
         <Route path="/" element={<Login />} /> 
         <Route path="/register" element={<Registration />} /> 
+        <Route path="*" element={<Login />}/>
           </>
         }
       
